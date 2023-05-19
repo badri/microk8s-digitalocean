@@ -62,6 +62,7 @@ Simply run the `terraform plan` and then `terraform apply`
 The module automatically downloads the kubeconfig file to your local machine in `client.config`
 In order to access the Kubernetes cluster from your local machine, simply do `export KUBECONFIG=/<pwd>/client.config`
 
+```bash
 $ kubectl get nodes
 NAME                        STATUS   ROLES    AGE   VERSION
 microk8s-node-lakshmi-0     Ready    <none>   16m   v1.27.1
@@ -69,6 +70,7 @@ microk8s-node-lakshmi-1     Ready    <none>   14m   v1.27.1
 microk8s-node-lakshmi-2     Ready    <none>   14m   v1.27.1
 microk8s-worker-lakshmi-0   Ready    <none>   13m   v1.27.1
 microk8s-worker-lakshmi-1   Ready    <none>   13m   v1.27.1
+```
 
 This will connect using the load balancer fronting the api servers.
 
