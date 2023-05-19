@@ -14,14 +14,14 @@ For example to bootstrap a 3 control plane nodes and 2 worker nodes cluster.
 
 module "microk8s" {
   source                       = "../"
-  cluster_name                 = "hades"
+  cluster_name                 = "lakshmi"
   node_count                   = "3"
   worker_node_count            = "2"
   os_image                     = "ubuntu-20-04-x64"
   node_size                    = "s-2vcpu-4gb"
   worker_node_size             = "s-4vcpu-8gb"
   node_disksize                = "30"
-  region                       = "sgp1"
+  region                       = "blr1"
   microk8s_channel             = "latest/stable"
   cluster_token_ttl_seconds    = 3600
 }
@@ -58,28 +58,17 @@ TF_VAR_digitalocean_token=<your DO access token>
 
 Simply run the `terraform plan` and then `terraform apply`
 
-Once terraform completes, you should be able to see the cluster.
-
-Login to one of the node using `ssh root@node`, then issue the command below.
-
-```shell
-
-root@microk8s-node-cetacean-0:~# microk8s kubectl get no
-NAME                       STATUS   ROLES    AGE     VERSION
-microk8s-node-cetacean-0   Ready    <none>   6m36s   v1.20.4-38+85035ca77e3c6e
-microk8s-node-cetacean-2   Ready    <none>   4m33s   v1.20.4-38+85035ca77e3c6e
-microk8s-node-cetacean-6   Ready    <none>   4m47s   v1.20.4-38+85035ca77e3c6e
-microk8s-node-cetacean-5   Ready    <none>   4m21s   v1.20.4-38+85035ca77e3c6e
-microk8s-node-cetacean-4   Ready    <none>   4m15s   v1.20.4-38+85035ca77e3c6e
-microk8s-node-cetacean-3   Ready    <none>   4m12s   v1.20.4-38+85035ca77e3c6e
-microk8s-node-cetacean-1   Ready    <none>   4m6s    v1.20.4-38+85035ca77e3c6e
-
-```
-
-## Downloading Kube config file
 
 The module automatically downloads the kubeconfig file to your local machine in `client.config`
-In order to access the Kubernetes cluster from your local machine, simple do `export KUBECONFIG=/<pwd>/client.config`
+In order to access the Kubernetes cluster from your local machine, simply do `export KUBECONFIG=/<pwd>/client.config`
+
+$ kubectl get nodes
+NAME                        STATUS   ROLES    AGE   VERSION
+microk8s-node-lakshmi-0     Ready    <none>   16m   v1.27.1
+microk8s-node-lakshmi-1     Ready    <none>   14m   v1.27.1
+microk8s-node-lakshmi-2     Ready    <none>   14m   v1.27.1
+microk8s-worker-lakshmi-0   Ready    <none>   13m   v1.27.1
+microk8s-worker-lakshmi-1   Ready    <none>   13m   v1.27.1
 
 This will connect using the load balancer fronting the api servers.
 
