@@ -1,9 +1,6 @@
 # DigitalOcean Terraform MicroK8s
 
-**Verfied using terraform v1.2.6**
-
-~~Does not work when modifying the module after it is created.~~
-**Adding a new node now works**
+**Verfied using terraform v1.4.6**
 
 **Warning Reducing nodes still does not leave the cluster**
 
@@ -25,13 +22,8 @@ module "microk8s" {
   worker_node_size             = "s-4vcpu-8gb"
   node_disksize                = "30"
   region                       = "sgp1"
-  dns_zone                     = "geeks.sg"
   microk8s_channel             = "latest/stable"
   cluster_token_ttl_seconds    = 3600
-  digitalocean_ssh_fingerprint = var.digitalocean_ssh_fingerprint
-  digitalocean_private_key     = var.digitalocean_private_key
-  digitalocean_token           = var.digitalocean_token
-  digitalocean_pub_key         = var.digitalocean_pub_key
 }
 
 
@@ -48,10 +40,6 @@ module "microk8s" {
 | dns_zone                      | The DNS zone representing your site.  Need to register your domain. | geeks.sg
 | microk8s_channel              | Specify the MicroK8s channel to use.  Refer [here](https://snapcraft.io/microk8s)| stable
 | cluster_token_ttl_seconds     | How long the token validity (in seconds)| 3600
-| digitalocean_ssh_fingerprint  | Your DigitalOcean SSH fingerprint to use, so you can seemlessly `ssh` into your nodes| Refer to `TF` environment variables
-| digitalocean_private_key      | The private key location to use when connecting to your droplets| Refer to `TF` environment variables
-| digitalocean_token            | Your DigitalOcean token| Refer to `TF` environment variables
-| digitalocean_pub_key          | The public key to use to connect to the droplet| Refer to `TF` environment variables
 | worker_node_size              | The worker node size example: `s-4vcpu-8gb` | s-4vcpu-8gb
 | worker_node_count             | The number of MicroK8s worker nodes | 2
 | worker_node_disksize          | Additional volume to add to the droplet.  Size in GB| 100 |
@@ -64,10 +52,6 @@ You must have these environment variables present.
 ```shell
 
 TF_VAR_digitalocean_token=<your DO access token>
-TF_VAR_digitalocean_ssh_fingerprint=<Your private key fingerprint>
-TF_VAR_digitalocean_private_key=<location of your private key>
-TF_VAR_digitalocean_pub_key=<location of your public key>
-
 ```
 
 ## Creating the cluster
@@ -94,13 +78,10 @@ microk8s-node-cetacean-1   Ready    <none>   4m6s    v1.20.4-38+85035ca77e3c6e
 
 ## Downloading Kube config file
 
-The module automatically downloads the kubeconfig file to your local machine in `/tmp/client.config`
-In order to access the Kubernetes cluster from your local machine, simple do `export KUBECONFIG=/tmp/client.config`
+The module automatically downloads the kubeconfig file to your local machine in `client.config`
+In order to access the Kubernetes cluster from your local machine, simple do `export KUBECONFIG=/<pwd>/client.config`
 
-This will connect using the load balancer fronting the api servers.  The dns entry will be `microk8s-cluster.<domain name>`
-
-Example:
-`microk8s-cluster.geeks.sg`
+This will connect using the load balancer fronting the api servers.
 
 ## MicroK8s High Availability
 It requires node counts to be greater than or equal to 3 to form a majority.  Each node can be a control plane, hence there is really no concept of control plane.
@@ -111,23 +92,3 @@ Check documentation on [MicroK8s Discuss HA](https://discuss.kubernetes.io/t/hig
 ## Digitalocean attached volume
 
 This terraform also creates and attach a volume to each droplet.  This will let you setup Rook + Ceph storage.  This way you can freely create volumes that you can share to your pods.
-
-# Persistent Volumes
-
-The following sections describes how to install Rook/Ceph, Longhorn and OpenEBS with MicroK8s
-
-## Using Rook / Ceph
-
-Some instructions on how to use [Rook](docs/rook.md)
-
-## Using Longhorn storage
-
-Some instructions on how to use [Longhorn](docs/longhorn.md)
-
-## Using OpenEBS
-
-Instructions on how to install [OpenEBS](docs/openebs.md)
-
-## Worker node only node
-
-If you want to create a worker node only node, refer to these [instructions](docs/worker-node.md)

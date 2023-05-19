@@ -12,14 +12,14 @@ resource "digitalocean_firewall" "rules" {
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
 
- # allow nodes to contact each other
+  # allow nodes to contact each other
   inbound_rule {
     protocol    = "tcp"
     port_range  = "1-65535"
     source_tags = [digitalocean_tag.microk8s-node.id, digitalocean_tag.microk8s-worker.id]
   }
 
-   # allow nodes to contact each other
+  # allow nodes to contact each other
   inbound_rule {
     protocol    = "udp"
     port_range  = "1-65535"

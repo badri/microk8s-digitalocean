@@ -1,16 +1,20 @@
 terraform {
   required_providers {
-    template = "~> 2.2"
-    null     = "~> 3.1"
-
+    null = {
+      source  = "hashicorp/null"
+      version = "3.2.1"
+    }
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "~> 2.7.0"
+      version = "~> 2.28.1"
     }
     random = {
-      source = "hashicorp/random"
-      version = "~>3.1.0"
+      source  = "hashicorp/random"
+      version = "~>3.5.1"
+    }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "4.0.4"
     }
   }
- 
 }
